@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <title>Outer Wilds Progress Tracker</title>
+
+</head>
+
+<body>
+
+  <h1>Outer Wilds Progress Tracker</h1>
+
+  <p>Current URL: <span id="current-url"></span></p>
+
+  <form>
+    <h2>BBThe Attlerock</h2>
+    <h3>BBEsker's Camp</h3>
+    <label>BBVisited: </label><input type="checkbox" id="bbeskerscamp" />
+
+    <label>BBSpoken to Esker: </label><input type="checkbox" id="bbeskerscamp_speech" /> 
+    <label>BBEsker's signal identified: </label><input type="checkbox" id="bbeskerscamp_signal" /> 
+
+    <span id="progress_tracker"></span>
+  </form>
+
+
+  <script>
+
+    const planets = {
+        attlerock : {
+            name:"The Attlerock",
+            id:"attlerock",
+            locations:{
+                eskerscamp:{
+                    name:"Esker's Camp",
+                    id:"eskerscamp",
+                    signal:{
+                        name:"Esker",
+                        frequency:"Outer Wilds Ventures"
+                    },
+                    character:{
+                        name:"Esker",
+                        id:"esker",
+                    }
+                }
+            },
+
+    }}
+
+    const url = new URL(window.location.href);
+
+    const params = new URLSearchParams(url.search);
+
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+
+    checkboxes.forEach((checkbox) => {
+
+      checkbox.addEventListener('change', () => {
+
+        params.set(checkbox.id, checkbox.checked ? 'true' : 'false');
+
+        url.search = params.toString();
+
+        window.history.replaceState({}, '', url.href);
+
+        document.getElementById('current-url').textContent = url.href;
+
+      });
+
+    });
+
+
+    // Initialize checkbox states from URL query parameters
+
+    checkboxes.forEach((checkbox) => {
+
+      const paramValue = params.get(checkbox.id);
+
+      if (paramValue === 'true') {
+
+        checkbox.checked = true;
+
+      } else {
+
+        checkbox.checked = false;
+
+      }
+
+    });
+
+  </script>
+
+</body>
+
+</html>
