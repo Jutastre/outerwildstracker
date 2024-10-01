@@ -68,23 +68,19 @@
       header = document.createElement('h2');
       header.innerHTML = planet.name;
       span = document.createElement('span');
-      rb = document.createElement('rb');
 
       planet.pois.forEach((poi) => {
         label = document.createElement('span');
-        label.innerHTML = poi;
+        label.innerHTML = '\n' + poi + ': ';
         box = document.createElement('input');
         box.type = "checkbox";
         box.id = unused_id;
         unused_id = unused_id + 1;
-        inner_rb = document.createElement('rb');
-        label.appendChild(inner_rb);
         span.appendChild(label);
         span.appendChild(box);
       });
       tracker.appendChild(header);
       tracker.appendChild(span);
-      tracker.appendChild(rb);
     });
 
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
