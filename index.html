@@ -17,12 +17,16 @@
   <p>Current URL: <span id="current-url"></span></p>
 
   <form>
-    <h2>BBThe Attlerock</h2>
+    <!-- <h2>BBThe Attlerock</h2>
     <h3>BBEsker's Camp</h3>
     <label>BBVisited: </label><input type="checkbox" id="bbeskerscamp" />
 
     <label>BBSpoken to Esker: </label><input type="checkbox" id="bbeskerscamp_speech" /> 
     <label>BBEsker's signal identified: </label><input type="checkbox" id="bbeskerscamp_signal" /> 
+    <label>BBVisited: </label><input type="checkbox" id="bbeskerscamp" />
+
+    <label>BBSpoken to Esker: </label><input type="checkbox" id="bbeskerscamp_speech" /> 
+    <label>BBEsker's signal identified: </label><input type="checkbox" id="bbeskerscamp_signal" />  -->
 
     <span id="progress_tracker"></span>
   </form>
@@ -30,72 +34,108 @@
 
   <script>
 
-    const planets = {
-        attlerock : {
+    const planets = [
+        {
             name:"The Attlerock",
-            id:"attlerock",
-            locations:{
-                eskerscamp:{
-                    name:"Esker's Camp",
-                    id:"eskerscamp",
-                    signal:{
-                        name:"Esker",
-                        frequency:"Outer Wilds Ventures"
-                    },
-                    character:{
-                        name:"Esker",
-                        id:"esker",
-                    }
-                }
-            },
-
-    }};
+            pois:[
+                  "Visited Esker's Camp",
+                  "Spoken to Esker",
+                  "Identified Eskers Signal",
+                  "Explored the Quantum Moon Locator"
+            ]
+        },
+        {
+            name:"The Interloper",
+            pois:[
+                  "Discovered the shuttle",
+                  "Discovered the crack",
+                  "Found the core"
+            ]
+        },
+      ];
 
     const url = new URL(window.location.href);
 
     const params = new URLSearchParams(url.search);
 
+
+    numerical_data = 0;
+
+    unused_id = 0;
+
+    planets.forEach((planet) => {
+      tracker = document.getElementById('progress_tracker');
+      header = document.createElement('h2');
+      header.innerHTML = planet.name;
+      span = document.createElement('span');
+      rb = document.createElement('rb');
+
+      planet.pois.forEach((poi) => {
+        label = document.createElement('span');
+        label.innerHTML = poi;
+        box = document.createElement('input');
+        box.type = "checkbox";
+        box.id = unused_id;
+        unused_id = unused_id + 1;
+        inner_rb = document.createElement('rb');
+        label.appendChild(inner_rb);
+        span.appendChild(label);
+        span.appendChild(box);
+      });
+      tracker.appendChild(header);
+      tracker.appendChild(span);
+      tracker.appendChild(rb);
+    });
+
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-
-    const numerical_data = 0;
-
     function update_url(){
+      idx_value = 1;
+      numerical_data = 0;
+      checkboxes.forEach((checkbox) => {
+        if (checkbox.checked) {
+          numerical_data += idx_value;
+        }
+        idx_value *= 2;
+      });
 
-    }
+      params.set("p", numerical_data);
+      url.search = params.toString();
+
+      window.history.replaceState({}, '', url.href);
+
+      document.getElementById('current-url').textContent = url.href;
+    };
 
     checkboxes.forEach((checkbox) => {
-
+      console.log("registering id:" + checkbox.id)
       checkbox.addEventListener('change', () => {
+        update_url();
+        // params.set(checkbox.id, checkbox.checked ? 'true' : 'false');
 
-        params.set(checkbox.id, checkbox.checked ? 'true' : 'false');
+        // url.search = params.toString();
 
-        url.search = params.toString();
+        // window.history.replaceState({}, '', url.href);
 
-        window.history.replaceState({}, '', url.href);
-
-        document.getElementById('current-url').textContent = url.href;
+        // document.getElementById('current-url').textContent = url.href;
 
       });
 
     });
 
 
-    // Initialize checkbox states from URL query parameters
+    // Initialize checkbox states from URL query parameter
 
+    const paramValue = params.get("p");
+    idx_value = 1;
     checkboxes.forEach((checkbox) => {
 
-      const paramValue = params.get(checkbox.id);
 
-      if (paramValue === 'true') {
-
+      if (paramValue & idx_value) {
         checkbox.checked = true;
-
       } else {
-
         checkbox.checked = false;
-
       }
-
+      idx_value *= 2;
     });
 
   </script>
