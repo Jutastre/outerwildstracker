@@ -103,17 +103,7 @@
 
     checkboxes.forEach((checkbox) => {
       console.log("registering id:" + checkbox.id)
-      checkbox.addEventListener('change', () => {
-        update_url();
-        // params.set(checkbox.id, checkbox.checked ? 'true' : 'false');
-
-        // url.search = params.toString();
-
-        // window.history.replaceState({}, '', url.href);
-
-        // document.getElementById('current-url').textContent = url.href;
-
-      });
+      checkbox.addEventListener('change', update_url);
 
     });
 
