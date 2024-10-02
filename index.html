@@ -4,126 +4,166 @@
 
 <head>
 
-  <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 
-  <title>Outer Wilds Progress Tracker</title>
+    <title>Outer Wilds Progress Tracker</title>
 
 </head>
 
 <body>
 
-  <h1>Outer Wilds Progress Tracker</h1>
+    <h1>Outer Wilds Progress Tracker <a href="file:///home/juta/kodproj/outerwildstracker/index.html"> reset</a></h1>
 
-  <p>Current URL: <span id="current-url"></span></p>
+    <p>Current URL: <span id="current-url"></span></p>
 
-  <form>
-    <!-- <h2>BBThe Attlerock</h2>
-    <h3>BBEsker's Camp</h3>
-    <label>BBVisited: </label><input type="checkbox" id="bbeskerscamp" />
+    <form>
+        <!-- <h2>BBThe Attlerock</h2>
+        <h3>BBEsker's Camp</h3>
+        <label>BBVisited: </label><input type="checkbox" id="bbeskerscamp" />
 
-    <label>BBSpoken to Esker: </label><input type="checkbox" id="bbeskerscamp_speech" /> 
-    <label>BBEsker's signal identified: </label><input type="checkbox" id="bbeskerscamp_signal" /> 
-    <label>BBVisited: </label><input type="checkbox" id="bbeskerscamp" />
+        <label>BBSpoken to Esker: </label><input type="checkbox" id="bbeskerscamp_speech" /> 
+        <label>BBEsker's signal identified: </label><input type="checkbox" id="bbeskerscamp_signal" /> 
+        <label>BBVisited: </label><input type="checkbox" id="bbeskerscamp" />
 
-    <label>BBSpoken to Esker: </label><input type="checkbox" id="bbeskerscamp_speech" /> 
-    <label>BBEsker's signal identified: </label><input type="checkbox" id="bbeskerscamp_signal" />  -->
+        <label>BBSpoken to Esker: </label><input type="checkbox" id="bbeskerscamp_speech" /> 
+        <label>BBEsker's signal identified: </label><input type="checkbox" id="bbeskerscamp_signal" />  -->
 
-    <span id="progress_tracker"></span>
-  </form>
-
-
-  <script>
-
-    const planets = [
-        {
-            name:"Timber Hearth",
-            pois:[
-                  "Obtained launch codes",
-                  "Explored the Zero-G cave"
-            ]
-        },
-        {
-            name:"The Attlerock",
-            pois:[
-                  "Visited Esker's Camp",
-                  "Spoken to Esker",
-                  "Identified Eskers Signal",
-                  "Explored the Locator"
-            ]
-        },
-      ];
-
-    const url = new URL(window.location.href);
-
-    const params = new URLSearchParams(url.search);
+        <span id="progress_tracker"></span>
+    </form>
 
 
-    numerical_data = 0;
+    <script>
 
-    unused_id = 0;
+        version = 1;
 
-    planets.forEach((planet) => {
-      tracker = document.getElementById('progress_tracker');
-      header = document.createElement('h2');
-      header.innerHTML = planet.name;
-      span = document.createElement('span');
+        magic_number = 15413645;
+        magic_number = 0;
 
-      planet.pois.forEach((poi) => {
-        label = document.createElement('span');
-        label.innerHTML = '\n' + poi + ': ';
-        box = document.createElement('input');
-        box.type = "checkbox";
-        box.id = unused_id;
-        unused_id = unused_id + 1;
-        span.appendChild(label);
-        span.appendChild(box);
-      });
-      tracker.appendChild(header);
-      tracker.appendChild(span);
-    });
+        console.log("magic_number: " + magic_number)
 
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    function update_url(){
-      idx_value = 1;
-      numerical_data = 0;
-      checkboxes.forEach((checkbox) => {
-        if (checkbox.checked) {
-          numerical_data += idx_value;
+        const planets = [
+              {
+                  name:"Timber Hearth",
+                  pois:[
+                      "Obtained launch codes",
+                      "Explored the Zero-G cave"
+                  ]
+              },
+              {
+                  name:"The Attlerock",
+                  pois:[
+                      "Visited Esker's Camp",
+                      "Spoken to Esker",
+                      "Identified Eskers Signal",
+                      "Explored the Locator"
+                  ]
+              },
+          ];
+
+        const url = new URL(window.location.href);
+
+        const params = new URLSearchParams(url.search);
+
+
+        numerical_data = 0;
+
+        unused_id = 0;
+
+        planets.forEach((planet) => {
+            tracker = document.getElementById('progress_tracker');
+            header = document.createElement('h2');
+            header.innerHTML = planet.name;
+            span = document.createElement('span');
+
+            planet.pois.forEach((poi) => {
+                label = document.createElement('span');
+                label.innerHTML = poi + ': ';
+
+                box = document.createElement('input');
+                box.type = "checkbox";
+                box.id = unused_id;
+                unused_id = unused_id + 1;
+
+                rowbreak = document.createElement('span');
+                rowbreak.innerHTML = "<br>";
+
+                span.appendChild(label);
+                span.appendChild(box);
+                span.appendChild(rowbreak);
+            });
+            tracker.appendChild(header);
+            tracker.appendChild(span);
+        });
+
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+        function b64tob64url(b64string) {
+            b64urlstring = b64string.replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
+            console.log("b64tob64url: " + b64string + " to " + b64urlstring);
+            return b64urlstring;
         }
-        idx_value *= 2;
-      });
 
-      params.set("p", numerical_data);
-      url.search = params.toString();
+        function b64urltob64(b64urlstring) {
+            b64string = b64urlstring.replaceAll('-', '+').replaceAll('_', '/');
+            console.log("b64urltob64: " + b64urlstring + " to " + b64string);
+            return b64string;
+        }
 
-      window.history.replaceState({}, '', url.href);
+        function update_url(){
+            idx_value = 1;
+            numerical_data = 0;
+            checkboxes.forEach((checkbox) => {
+                if (checkbox.checked) {
+                    numerical_data += idx_value;
+                }
+                idx_value *= 2;
+            });
 
-      document.getElementById('current-url').textContent = url.href;
-    };
+            encoded_data = window.btoa(numerical_data ^ magic_number);
 
-    checkboxes.forEach((checkbox) => {
-      console.log("registering id:" + checkbox.id)
-      checkbox.addEventListener('change', update_url);
+            url_safe_encoded_data = b64tob64url(encoded_data);
 
-    });
+            // console.log("encoding version: " + version + " and number: " + numerical_data + " to '" + encoded_data + "'");
+            console.log("encoding number: " + numerical_data + " to '" + url_safe_encoded_data + "'");
+            params.set("p", url_safe_encoded_data);
+            url.search = params.toString();
+
+            window.history.replaceState({}, '', url.href);
+
+            document.getElementById('current-url').textContent = url.href;
+        };
+
+        checkboxes.forEach((checkbox) => {
+            // console.log("registering id:" + checkbox.id)
+            checkbox.addEventListener('change', update_url);
+        });
 
 
-    // Initialize checkbox states from URL query parameter
+        // Initialize checkbox states from URL query parameter
 
-    const paramValue = params.get("p");
-    idx_value = 1;
-    checkboxes.forEach((checkbox) => {
+        url_safe_encoded_data = params.get("p");
+        if (url_safe_encoded_data) {
+            console.log(url_safe_encoded_data);
+            console.log(b64urltob64(url_safe_encoded_data));
+            encoded_data = b64urltob64(url_safe_encoded_data);
+            decoded_data = window.atob(encoded_data);
+            numerical_data = decoded_data ^ magic_number;
+            console.log("decoding code: " + url_safe_encoded_data + " to '" + numerical_data + "'");
+            idx_value = 1;
+            checkboxes.forEach((checkbox) => {
 
 
-      if (paramValue & idx_value) {
-        checkbox.checked = true;
-      } else {
-        checkbox.checked = false;
-      }
-      idx_value *= 2;
-    });
+                if (numerical_data & idx_value) {
+                  checkbox.checked = true;
+                } else {
+                  checkbox.checked = false;
+                }
+                idx_value *= 2;
+            });
+        }
 
-  </script>
+    update_url()
+    </script>
 
 </body>
 
