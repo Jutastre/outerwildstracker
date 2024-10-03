@@ -12,7 +12,8 @@
 
 <body>
 
-    <h1>Outer Wilds Progress Tracker <a href="file:///home/juta/kodproj/outerwildstracker/index.html"> reset</a></h1>
+    <h1>Outer Wilds Progress Tracker</h1>
+    <h2><a id="reset_button" href="">Reset</a></h2>
 
     <p>Current URL: <span id="current-url"></span></p>
 
@@ -109,6 +110,8 @@
             return b64string;
         }
 
+
+
         function update_url(){
             idx_value = 1;
             numerical_data = 0;
@@ -144,7 +147,15 @@
             checkbox.addEventListener('change', update_url);
         });
 
+        function reset(){
+            checkboxes.forEach((checkbox) => {
+                checkbox.checked = false;
+            });
+            update_url();
+            return false;
+        }
 
+        document.getElementById("reset_button").onclick = reset;
         // Initialize checkbox states from URL query parameter
 
         url_safe_encoded_data = params.get("p");
@@ -157,8 +168,6 @@
             console.log("decoding code: " + url_safe_encoded_data + " to '" + numerical_data + "'");
             idx_value = 1;
             checkboxes.forEach((checkbox) => {
-
-
                 if (numerical_data & idx_value) {
                   checkbox.checked = true;
                 } else {
