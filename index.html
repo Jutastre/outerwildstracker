@@ -15,7 +15,7 @@
     <h1>Outer Wilds Progress Tracker</h1>
     <h2><a id="reset_button" href="">Reset</a></h2>
 
-    <p>Current URL: <span id="current-url"></span></p>
+    <p>Current URL: <span id="current-url"></span> (click to copy)</p>
 
     <form>
         <!-- <h2>BBThe Attlerock</h2>
@@ -110,8 +110,6 @@
             return b64string;
         }
 
-
-
         function update_url(){
             idx_value = 1;
             numerical_data = 0;
@@ -121,13 +119,9 @@
                 }
                 idx_value *= 2;
             });
-
             if (numerical_data) {
-
                 encoded_data = window.btoa(numerical_data ^ magic_number);
-
                 url_safe_encoded_data = b64tob64url(encoded_data);
-
                 // console.log("encoding version: " + version + " and number: " + numerical_data + " to '" + encoded_data + "'");
                 console.log("encoding number: " + numerical_data + " to '" + url_safe_encoded_data + "'");
                 params.set("p", url_safe_encoded_data);
@@ -135,10 +129,7 @@
             } else {
                 url.search = '';
             }
-
-
             window.history.replaceState({}, '', url.href);
-
             document.getElementById('current-url').textContent = url.href;
         };
 
@@ -146,6 +137,14 @@
             // console.log("registering id:" + checkbox.id)
             checkbox.addEventListener('change', update_url);
         });
+
+        function copy_url() {
+            current_url = document.getElementById('current-url').textContent;
+            navigator.clipboard.writeText(current_url);
+            console.log("copied url: " + current_url);
+        }
+
+        document.getElementById('current-url').onclick = copy_url;
 
         function reset(){
             checkboxes.forEach((checkbox) => {
@@ -177,7 +176,7 @@
             });
         }
 
-        update_url()
+        update_url();
     </script>
 
 </body>
