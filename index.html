@@ -36,8 +36,8 @@
 
         version = 1;
 
-        magic_number = 15413645;
-        magic_number = 0;
+        magic_number = 413645;
+        // magic_number = 0;
 
         console.log("magic_number: " + magic_number)
 
@@ -119,14 +119,20 @@
                 idx_value *= 2;
             });
 
-            encoded_data = window.btoa(numerical_data ^ magic_number);
+            if (numerical_data) {
 
-            url_safe_encoded_data = b64tob64url(encoded_data);
+                encoded_data = window.btoa(numerical_data ^ magic_number);
 
-            // console.log("encoding version: " + version + " and number: " + numerical_data + " to '" + encoded_data + "'");
-            console.log("encoding number: " + numerical_data + " to '" + url_safe_encoded_data + "'");
-            params.set("p", url_safe_encoded_data);
-            url.search = params.toString();
+                url_safe_encoded_data = b64tob64url(encoded_data);
+
+                // console.log("encoding version: " + version + " and number: " + numerical_data + " to '" + encoded_data + "'");
+                console.log("encoding number: " + numerical_data + " to '" + url_safe_encoded_data + "'");
+                params.set("p", url_safe_encoded_data);
+                url.search = params.toString();
+            } else {
+                url.search = '';
+            }
+
 
             window.history.replaceState({}, '', url.href);
 
@@ -162,7 +168,7 @@
             });
         }
 
-    update_url()
+        update_url()
     </script>
 
 </body>
